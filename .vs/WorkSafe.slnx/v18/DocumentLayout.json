@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\joaod\\source\\repos\\WorkSafe\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{12B943C6-71BC-1990-38FA-18CD16D32950}|WorkSafe\\WorkSafe.csproj|c:\\users\\joaod\\source\\repos\\worksafe\\worksafe\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{12B943C6-71BC-1990-38FA-18CD16D32950}|WorkSafe\\WorkSafe.csproj|solutionrelative:worksafe\\readme.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Users\\joaod\\source\\repos\\WorkSafe\\WorkSafe\\README.md",
+              "RelativeDocumentMoniker": "WorkSafe\\README.md",
+              "ToolTip": "C:\\Users\\joaod\\source\\repos\\WorkSafe\\WorkSafe\\README.md",
+              "RelativeToolTip": "WorkSafe\\README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2025-11-21T01:11:06.527Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

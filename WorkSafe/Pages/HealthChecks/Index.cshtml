@@ -1,0 +1,118 @@
+@page "/HealthChecks/{userId:int?}"
+@model HabitFlow.Pages.HealthChecks.IndexModel
+@{
+    ViewData["Title"] = "Histórico de Verificações - WorkSafe";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">
+                <i class="bi bi-list"></i> Histórico de Verificações de Saúde
+            </h1>
+        </div>
+    </div>
+
+    @if (Model.HealthChecks.Any())
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead style="background-color: #001f3f; color: white;">
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Estresse</th>
+                                    <th>Sono</th>
+                                    <th>Satisfação</th>
+                                    <th>Mental</th>
+                                    <th>Físico</th>
+                                    <th>Score</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var check in Model.HealthChecks)
+                                {
+                                    <tr>
+                                        <td>@check.CheckedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>
+                                            <span class="badge" style="background-color: @GetStressBadge(check.StressLevel);">
+                                                @check.StressLevel/10
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background-color: @GetSleepBadge(check.SleepQuality);">
+                                                @check.SleepQuality/10
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background-color: @GetJobBadge(check.JobSatisfaction);">
+                                                @check.JobSatisfaction/10
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background-color: @GetHealthBadge(check.MentalHealth);">
+                                                @check.MentalHealth/10
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge" style="background-color: @GetHealthBadge(check.PhysicalHealth);">
+                                                @check.PhysicalHealth/10
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <strong>@check.WellnessScore/100</strong>
+                                        </td>
+                                        <td>
+                                            <a href="/HealthChecks/@check.Id/edit" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="/HealthChecks/@check.Id/details" class="btn btn-sm btn-outline-info">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Nenhuma verificação de saúde encontrada.
+            <a href="/HealthChecks/Create" class="btn btn-sm btn-primary ms-2">Criar Nova</a>
+        </div>
+    }
+
+    <div class="mt-3">
+        <a href="/" class="btn btn-secondary">Voltar ao Painel</a>
+    </div>
+</div>
+
+@functions {
+    private string GetStressBadge(int level)
+    {
+        return level >= 8 ? "#dc3545" : level >= 5 ? "#ffc107" : "#0066cc";
+    }
+
+    private string GetSleepBadge(int level)
+    {
+        return level <= 3 ? "#dc3545" : level <= 5 ? "#ffc107" : "#0066cc";
+    }
+
+    private string GetJobBadge(int level)
+    {
+        return level <= 3 ? "#dc3545" : level <= 5 ? "#ffc107" : "#0066cc";
+    }
+
+    private string GetHealthBadge(int level)
+    {
+        return level <= 3 ? "#dc3545" : level <= 5 ? "#ffc107" : "#0066cc";
+    }
+}

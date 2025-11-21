@@ -1,0 +1,87 @@
+@page "/Alerts/{userId:int?}"
+@model HabitFlow.Pages.Alerts.IndexModel
+@{
+    ViewData["Title"] = "Alertas de Bem-Estar - WorkSafe";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">
+                <i class="bi bi-exclamation-triangle"></i> Alertas de Bem-Estar
+            </h1>
+        </div>
+    </div>
+
+    @if (Model.Alerts.Any())
+    {
+        @foreach (var alert in Model.Alerts.OrderByDescending(a => a.Severity))
+        {
+            <div class="alert alert-@GetAlertClass(alert.Severity) alert-dismissible fade show" role="alert">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h4 class="alert-heading">
+                            @alert.Type (@alert.Severity)
+                            @if (!alert.IsRead)
+                            {
+                                <span class="badge" style="background-color: #001f3f;">Novo</span>
+                            }
+                            @if (alert.ResolvedAt.HasValue)
+                            {
+                                <span class="badge" style="background-color: #0052cc;">Resolvido</span>
+                            }
+                        </h4>
+                        <p>@alert.Message</p>
+                        @if (!string.IsNullOrEmpty(alert.Recommendation))
+                        {
+                            <hr>
+                            <p><strong>?? Recomendação:</strong> @alert.Recommendation</p>
+                        }
+                        <small class="text-muted">
+                            Criado em: @alert.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            @if (alert.ResolvedAt.HasValue)
+                            {
+                                <br />
+                                @($"Resolvido em: {alert.ResolvedAt:dd/MM/yyyy HH:mm}")
+                            }
+                        </small>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        @if (!alert.ResolvedAt.HasValue)
+                        {
+                            <form method="post" asp-page="Resolve" style="display:inline;">
+                                <input type="hidden" name="alertId" value="@alert.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-success" style="color: #0066cc; border-color: #0066cc;">
+                                    <i class="bi bi-check-circle"></i> Resolver
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle"></i> Nenhum alerta pendente. Seu bem-estar está em dia!
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="/" class="btn btn-secondary">Voltar ao Painel</a>
+    </div>
+</div>
+
+@functions {
+    private string GetAlertClass(string severity)
+    {
+        return severity switch
+        {
+            "Critical" => "danger",
+            "High" => "warning",
+            "Medium" => "info",
+            _ => "light"
+        };
+    }
+}

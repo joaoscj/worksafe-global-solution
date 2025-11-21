@@ -1,0 +1,179 @@
+@page
+@model HabitFlow.Pages.IndexModel
+@{
+    ViewData["Title"] = "Painel - WorkSafe";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">
+                <i class="bi bi-activity"></i> Painel de Bem-Estar
+            </h1>
+        </div>
+    </div>
+
+    @if (Model.UserWellness != null)
+    {
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Score de Bem-Estar</h5>
+                        <h2 class="display-4">@Model.UserWellness.AverageWellnessScore</h2>
+                        <small>Média Geral</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Verificações</h5>
+                        <h2 class="display-4">@Model.UserWellness.TotalHealthChecks</h2>
+                        <small>Total Realizadas</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card" style="background-color: #004ca3; color: white;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Alertas Pendentes</h5>
+                        <h2 class="display-4">@Model.UserWellness.UnresolvedAlerts</h2>
+                        <small>Não Resolvidos</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card" style="background-color: #0066cc; color: white;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Tendência</h5>
+                        <h5 class="card-text">@Model.UserWellness.Trend</h5>
+                        @if (Model.UserWellness.LastCheckAt.HasValue)
+                        {
+                            <small>Última: @Model.UserWellness.LastCheckAt?.ToString("dd/MM/yyyy")</small>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.LatestHealthCheck != null)
+    {
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-calendar-check"></i> Última Verificação de Saúde
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Data:</strong> @Model.LatestHealthCheck.CheckedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                                <p><strong>Observações:</strong> @(Model.LatestHealthCheck.Notes ?? "Nenhuma")</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" role="progressbar" 
+                         style="width: @(Model.LatestHealthCheck.StressLevel * 10)%"
+                         aria-valuenow="@Model.LatestHealthCheck.StressLevel" aria-valuemin="0" aria-valuemax="10">
+                                        Estresse: @Model.LatestHealthCheck.StressLevel/10
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" style="background-color: #0080cc; width: @(Model.LatestHealthCheck.SleepQuality * 10)%" role="progressbar" 
+                         aria-valuenow="@Model.LatestHealthCheck.SleepQuality" aria-valuemin="0" aria-valuemax="10">
+                                        Sono: @Model.LatestHealthCheck.SleepQuality/10
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" style="background-color: #0066cc; width: @(Model.LatestHealthCheck.JobSatisfaction * 10)%" role="progressbar" 
+                         aria-valuenow="@Model.LatestHealthCheck.JobSatisfaction" aria-valuemin="0" aria-valuemax="10">
+                                        Satisfação: @Model.LatestHealthCheck.JobSatisfaction/10
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.UnresolvedAlerts.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-exclamation-triangle"></i> Alertas Pendentes
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var alert in Model.UnresolvedAlerts)
+                        {
+                            <div class="alert alert-@GetAlertClass(alert.Severity) alert-dismissible fade show" role="alert">
+                                <strong>@alert.Type</strong> (@alert.Severity)<br>
+                                @alert.Message<br>
+                                @if (!string.IsNullOrEmpty(alert.Recommendation))
+                                {
+                                    <em><small>?? Recomendação: @alert.Recommendation</small></em>
+                                }
+                                <form method="post" asp-page="Alerts/Resolve" style="display:inline;">
+                                    <input type="hidden" name="alertId" value="@alert.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Resolver</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Ações Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <a href="/HealthChecks/Create" class="btn btn-primary btn-lg me-2">
+                        <i class="bi bi-plus-circle"></i> Nova Verificação de Saúde
+                    </a>
+                    <a href="/HealthChecks" class="btn btn-info btn-lg me-2">
+                        <i class="bi bi-list"></i> Histórico de Verificações
+                    </a>
+                    <a href="/Alerts" style="background-color: #004ca3; border-color: #004ca3;" class="btn btn-lg me-2">
+                        <i class="bi bi-bell"></i> Ver Todos os Alertas
+                    </a>
+                    <a href="/Tips" style="background-color: #0066cc; border-color: #0066cc;" class="btn btn-lg">
+                        <i class="bi bi-lightbulb"></i> Dicas de Bem-Estar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string GetAlertClass(string severity)
+    {
+        return severity switch
+        {
+            "Critical" => "danger",
+            "High" => "warning",
+            "Medium" => "info",
+            _ => "light"
+        };
+    }
+}

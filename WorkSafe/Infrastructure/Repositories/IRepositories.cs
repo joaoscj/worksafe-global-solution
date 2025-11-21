@@ -1,0 +1,45 @@
+using HabitFlow.Domain.Entities;
+
+namespace HabitFlow.Infrastructure.Repositories;
+
+public interface IHealthCheckRepository
+{
+    Task<HealthCheck?> GetByIdAsync(int id);
+    Task<IEnumerable<HealthCheck>> GetByUserIdAsync(int userId);
+    Task<HealthCheck?> GetLatestByUserIdAsync(int userId);
+    Task<IEnumerable<HealthCheck>> GetByDateRangeAsync(int userId, DateTime startDate, DateTime endDate);
+    Task AddAsync(HealthCheck healthCheck);
+    Task UpdateAsync(HealthCheck healthCheck);
+    Task DeleteAsync(int id);
+    Task SaveChangesAsync();
+}
+
+public interface IWellnessAlertRepository
+{
+    Task<WellnessAlert?> GetByIdAsync(int id);
+    Task<IEnumerable<WellnessAlert>> GetByUserIdAsync(int userId);
+    Task<IEnumerable<WellnessAlert>> GetUnresolvedByUserIdAsync(int userId);
+    Task AddAsync(WellnessAlert alert);
+    Task UpdateAsync(WellnessAlert alert);
+    Task DeleteAsync(int id);
+    Task SaveChangesAsync();
+}
+
+public interface IUserWellnessRepository
+{
+    Task<UserWellness?> GetByUserIdAsync(int userId);
+    Task AddAsync(UserWellness userWellness);
+    Task UpdateAsync(UserWellness userWellness);
+    Task SaveChangesAsync();
+}
+
+public interface IUserRepository
+{
+    Task<User?> GetByIdAsync(int id);
+    Task<User?> GetByEmailAsync(string email);
+    Task<IEnumerable<User>> GetAllAsync();
+    Task AddAsync(User user);
+    Task UpdateAsync(User user);
+    Task DeleteAsync(int id);
+    Task SaveChangesAsync();
+}

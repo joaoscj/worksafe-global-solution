@@ -1,0 +1,248 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+}
+
+main {
+    min-height: calc(100vh - 200px);
+    padding-bottom: 40px;
+}
+
+.navbar {
+    background-color: #001f3f !important;
+    box-shadow: 0 2px 4px rgba(0, 31, 63, 0.2);
+}
+
+.card {
+    box-shadow: 0 2px 8px rgba(0, 31, 63, 0.1);
+    border: none;
+    margin-bottom: 1.5rem;
+    background-color: #ffffff;
+}
+
+.card-header {
+    background-color: #003d7a !important;
+    border-bottom: 2px solid #001f3f;
+    color: white;
+}
+
+.progress {
+    height: 1.5rem;
+    border-radius: 0.5rem;
+    background-color: #e8f0f8;
+}
+
+.progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 500;
+    background-color: #0052cc !important;
+}
+
+.badge {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    background-color: #003d7a !important;
+}
+
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #0052cc;
+    border-color: #0052cc;
+}
+
+.btn-primary:hover {
+    background-color: #003d7a;
+    border-color: #003d7a;
+}
+
+.btn-info {
+    background-color: #0080cc;
+    border-color: #0080cc;
+}
+
+.btn-info:hover {
+    background-color: #0052cc;
+    border-color: #0052cc;
+}
+
+.btn-warning {
+    background-color: #004ca3;
+    border-color: #004ca3;
+}
+
+.btn-warning:hover {
+    background-color: #003d7a;
+    border-color: #003d7a;
+}
+
+.btn-success {
+    background-color: #0066cc;
+    border-color: #0066cc;
+}
+
+.btn-success:hover {
+    background-color: #0052cc;
+    border-color: #0052cc;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+.btn-outline-primary {
+    color: #0052cc;
+    border-color: #0052cc;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0052cc;
+    color: white;
+}
+
+.btn-outline-info {
+    color: #0080cc;
+    border-color: #0080cc;
+}
+
+.btn-outline-info:hover {
+    background-color: #0080cc;
+    color: white;
+}
+
+.btn-outline-success {
+    color: #0066cc;
+    border-color: #0066cc;
+}
+
+.btn-outline-success:hover {
+    background-color: #0066cc;
+    color: white;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.alert {
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #0052cc;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+footer {
+    background-color: #001f3f !important;
+    margin-top: auto;
+    border-top: 2px solid #003d7a;
+    color: white;
+}
+
+.display-4 {
+    font-weight: 700;
+    color: #001f3f;
+}
+
+.bg-primary {
+    background-color: #0052cc !important;
+}
+
+.bg-info {
+    background-color: #0080cc !important;
+}
+
+.bg-warning {
+    background-color: #004ca3 !important;
+}
+
+.bg-success {
+    background-color: #0066cc !important;
+}
+
+.bg-dark {
+    background-color: #001f3f !important;
+}
+
+.text-white {
+    color: white !important;
+}
+
+/* Wellness Score Colors */
+.wellness-high {
+    color: #0066cc;
+}
+
+.wellness-medium {
+    color: #004ca3;
+}
+
+.wellness-low {
+    color: #002a5c;
+}
+
+/* Range Input Styling */
+input[type="range"] {
+    cursor: pointer;
+    accent-color: #0052cc;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    cursor: pointer;
+    background-color: #0052cc;
+}
+
+input[type="range"]::-moz-range-thumb {
+    cursor: pointer;
+    background-color: #0052cc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .display-4 {
+        font-size: 2.5rem;
+    }
+}

@@ -1,0 +1,92 @@
+@page "/HealthChecks/Create"
+@model HabitFlow.Pages.HealthChecks.CreateModel
+@{
+    ViewData["Title"] = "Nova Verificação de Saúde - WorkSafe";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header" style="background-color: #0052cc; color: white;">
+                    <h4 class="mb-0">
+                        <i class="bi bi-plus-circle"></i> Nova Verificação de Saúde
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <input type="hidden" asp-for="HealthCheck.UserId" />
+
+                        <div class="mb-3">
+                            <label asp-for="HealthCheck.StressLevel" class="form-label">Nível de Estresse (1-10)</label>
+                            <input type="range" asp-for="HealthCheck.StressLevel" class="form-range" min="1" max="10" required />
+                            <small class="form-text text-muted">
+                                <span id="stressValue">@Model.HealthCheck.StressLevel</span>/10
+                            </small>
+                            <span asp-validation-for="HealthCheck.StressLevel" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HealthCheck.SleepQuality" class="form-label">Qualidade do Sono (1-10)</label>
+                            <input type="range" asp-for="HealthCheck.SleepQuality" class="form-range" min="1" max="10" required />
+                            <small class="form-text text-muted">
+                                <span id="sleepValue">@Model.HealthCheck.SleepQuality</span>/10
+                            </small>
+                            <span asp-validation-for="HealthCheck.SleepQuality" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HealthCheck.JobSatisfaction" class="form-label">Satisfação Profissional (1-10)</label>
+                            <input type="range" asp-for="HealthCheck.JobSatisfaction" class="form-range" min="1" max="10" required />
+                            <small class="form-text text-muted">
+                                <span id="jobValue">@Model.HealthCheck.JobSatisfaction</span>/10
+                            </small>
+                            <span asp-validation-for="HealthCheck.JobSatisfaction" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HealthCheck.MentalHealth" class="form-label">Saúde Mental (1-10)</label>
+                            <input type="range" asp-for="HealthCheck.MentalHealth" class="form-range" min="1" max="10" required />
+                            <small class="form-text text-muted">
+                                <span id="mentalValue">@Model.HealthCheck.MentalHealth</span>/10
+                            </small>
+                            <span asp-validation-for="HealthCheck.MentalHealth" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HealthCheck.PhysicalHealth" class="form-label">Saúde Física (1-10)</label>
+                            <input type="range" asp-for="HealthCheck.PhysicalHealth" class="form-range" min="1" max="10" required />
+                            <small class="form-text text-muted">
+                                <span id="physicalValue">@Model.HealthCheck.PhysicalHealth</span>/10
+                            </small>
+                            <span asp-validation-for="HealthCheck.PhysicalHealth" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="HealthCheck.Notes" class="form-label">Observações (Opcional)</label>
+                            <textarea asp-for="HealthCheck.Notes" class="form-control" rows="4" placeholder="Adicione notas sobre seu bem-estar..."></textarea>
+                            <span asp-validation-for="HealthCheck.Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-lg" style="background-color: #0066cc; color: white; border-color: #0066cc;">
+                                <i class="bi bi-check-circle"></i> Salvar Verificação
+                            </button>
+                            <a href="/" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('input[type="range"]').forEach(input => {
+            input.addEventListener('input', function () {
+                document.getElementById(this.name + 'Value').textContent = this.value;
+            });
+        });
+    </script>
+}

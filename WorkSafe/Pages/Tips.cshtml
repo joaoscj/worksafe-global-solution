@@ -1,0 +1,58 @@
+@page "/Tips/{userId:int?}"
+@model HabitFlow.Pages.TipsModel
+@{
+    ViewData["Title"] = "Dicas de Bem-Estar - WorkSafe";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">
+                <i class="bi bi-lightbulb"></i> Dicas de Bem-Estar Personalizadas
+            </h1>
+        </div>
+    </div>
+
+    @if (Model.Tips.Any())
+    {
+        <div class="row">
+            @foreach (var tip in Model.Tips)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header" style="background-color: #0052cc; color: white;">
+                            <h5 class="mb-0">
+                                <i class="bi bi-star"></i> @tip.Title
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@tip.Description</p>
+                            @if (!string.IsNullOrEmpty(tip.Category))
+                            {
+                                <p>
+                                    <span class="badge" style="background-color: #003d7a;">@tip.Category</span>
+                                </p>
+                            }
+                        </div>
+                        <div class="card-footer bg-light">
+                            <small class="text-muted">
+                                Score: @tip.MinWellnessScore - @tip.MaxWellnessScore
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Nenhuma dica disponível. Realize uma verificação de saúde para obter recomendações personalizadas.
+            <a href="/HealthChecks/Create" class="btn btn-sm btn-primary ms-2">Criar Verificação</a>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="/" class="btn btn-secondary">Voltar ao Painel</a>
+    </div>
+</div>
