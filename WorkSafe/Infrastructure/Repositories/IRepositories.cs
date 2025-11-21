@@ -8,6 +8,7 @@ public interface IHealthCheckRepository
     Task<IEnumerable<HealthCheck>> GetByUserIdAsync(int userId);
     Task<HealthCheck?> GetLatestByUserIdAsync(int userId);
     Task<IEnumerable<HealthCheck>> GetByDateRangeAsync(int userId, DateTime startDate, DateTime endDate);
+    Task<(List<HealthCheck> Items, int TotalCount)> GetPaginatedByUserIdAsync(int userId, int pageNumber = 1, int pageSize = 10, DateTime? startDate = null, DateTime? endDate = null, string sortBy = "CheckedAt", string sortDirection = "desc");
     Task AddAsync(HealthCheck healthCheck);
     Task UpdateAsync(HealthCheck healthCheck);
     Task DeleteAsync(int id);
@@ -19,6 +20,7 @@ public interface IWellnessAlertRepository
     Task<WellnessAlert?> GetByIdAsync(int id);
     Task<IEnumerable<WellnessAlert>> GetByUserIdAsync(int userId);
     Task<IEnumerable<WellnessAlert>> GetUnresolvedByUserIdAsync(int userId);
+    Task<(List<WellnessAlert> Items, int TotalCount)> GetPaginatedByUserIdAsync(int userId, int pageNumber = 1, int pageSize = 10, bool? includeResolved = false);
     Task AddAsync(WellnessAlert alert);
     Task UpdateAsync(WellnessAlert alert);
     Task DeleteAsync(int id);

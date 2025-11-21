@@ -1,0 +1,213 @@
+﻿using HabitFlow.Domain.Entities;
+using HabitFlow.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace HabitFlow.Infrastructure.Repositories;
+
+public class HealthCheckRepository : IHealthCheckRepository
+{
+    private readonly HabitFlowContext _context;
+
+    public HealthCheckRepository(HabitFlowContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<HealthCheck?> GetByIdAsync(int id)
+    {
+        return await _context.HealthChecks.FindAsync(id);
+    }
+
+    public async Task<IEnumerable<HealthCheck>> GetByUserIdAsync(int userId)
+    {
+        return await _context.HealthChecks
+            .Where(hc => hc.UserId == userId)
+            .OrderByDescending(hc => hc.CheckedAt)
+            .ToListAsync();
+    }
+
+    public async Task<HealthCheck?> GetLatestByUserIdAsync(int userId)
+    {
+        return await _context.HealthChecks
+            .Where(hc => hc.UserId == userId)
+            .OrderByDescending(hc => hc.CheckedAt)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<IEnumerable<HealthCheck>> GetByDateRangeAsync(int userId, DateTime startDate, DateTime endDate)
+    {
+        return await _context.HealthChecks
+            .Where(hc => hc.UserId == userId && hc.CheckedAt >= startDate && hc.CheckedAt <= endDate)
+            .OrderByDescending(hc => hc.CheckedAt)
+            .ToListAsync();
+    }
+
+    public async Task AddAsync(HealthCheck healthCheck)
+    {
+        if (!healthCheck.IsValid())
+            throw new InvalidOperationException("Health check has invalid values.");
+
+        await _context.HealthChecks.AddAsync(healthCheck);
+    }
+
+    public async Task UpdateAsync(HealthCheck healthCheck)
+    {
+        if (!healthCheck.IsValid())
+            throw new InvalidOperationException("Health check has invalid values.");
+
+        _context.HealthChecks.Update(healthCheck);
+        await Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var healthCheck = await GetByIdAsync(id);
+        if (healthCheck != null)
+        {
+            _context.HealthChecks.Remove(healthCheck);
+        }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+}
+
+public class WellnessAlertRepository : IWellnessAlertRepository
+{
+    private readonly HabitFlowContext _context;
+
+    public WellnessAlertRepository(HabitFlowContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<WellnessAlert?> GetByIdAsync(int id)
+    {
+        return await _context.WellnessAlerts.FindAsync(id);
+    }
+
+    public async Task<IEnumerable<WellnessAlert>> GetByUserIdAsync(int userId)
+    {
+        return await _context.WellnessAlerts
+            .Where(wa => wa.UserId == userId)
+            .OrderByDescending(wa => wa.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<WellnessAlert>> GetUnresolvedByUserIdAsync(int userId)
+    {
+        return await _context.WellnessAlerts
+            .Where(wa => wa.UserId == userId && wa.ResolvedAt == null)
+            .OrderByDescending(wa => wa.Severity)
+            .ThenByDescending(wa => wa.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task AddAsync(WellnessAlert alert)
+    {
+        await _context.WellnessAlerts.AddAsync(alert);
+    }
+
+    public async Task UpdateAsync(WellnessAlert alert)
+    {
+        _context.WellnessAlerts.Update(alert);
+        await Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var alert = await GetByIdAsync(id);
+        if (alert != null)
+        {
+            _context.WellnessAlerts.Remove(alert);
+        }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+}
+
+public class UserWellnessRepository : IUserWellnessRepository
+{
+    private readonly HabitFlowContext _context;
+
+    public UserWellnessRepository(HabitFlowContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<UserWellness?> GetByUserIdAsync(int userId)
+    {
+        return await _context.UserWellness.FirstOrDefaultAsync(uw => uw.UserId == userId);
+    }
+
+    public async Task AddAsync(UserWellness userWellness)
+    {
+        await _context.UserWellness.AddAsync(userWellness);
+    }
+
+    public async Task UpdateAsync(UserWellness userWellness)
+    {
+        _context.UserWellness.Update(userWellness);
+        await Task.CompletedTask;
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+}
+
+public class UserRepository : IUserRepository
+{
+    private readonly HabitFlowContext _context;
+
+    public UserRepository(HabitFlowContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<User?> GetByIdAsync(int id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
+
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
+
+    public async Task<IEnumerable<User>> GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
+    }
+
+    public async Task AddAsync(User user)
+    {
+        await _context.Users.AddAsync(user);
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        _context.Users.Update(user);
+        await Task.CompletedTask;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var user = await GetByIdAsync(id);
+        if (user != null)
+        {
+            _context.Users.Remove(user);
+        }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+}

@@ -42,6 +42,45 @@ public class HealthCheckRepository : IHealthCheckRepository
             .ToListAsync();
     }
 
+    public async Task<(List<HealthCheck> Items, int TotalCount)> GetPaginatedByUserIdAsync(
+        int userId, 
+        int pageNumber = 1, 
+        int pageSize = 10, 
+        DateTime? startDate = null, 
+        DateTime? endDate = null, 
+        string sortBy = "CheckedAt", 
+        string sortDirection = "desc")
+    {
+        var query = _context.HealthChecks.Where(hc => hc.UserId == userId);
+
+        if (startDate.HasValue && endDate.HasValue)
+        {
+            query = query.Where(hc => hc.CheckedAt >= startDate && hc.CheckedAt <= endDate);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var sortedQuery = sortBy.ToLower() switch
+        {
+            "stresslevel" => sortDirection.ToLower() == "asc" 
+                ? query.OrderBy(hc => hc.StressLevel)
+                : query.OrderByDescending(hc => hc.StressLevel),
+            "wellnessscore" => sortDirection.ToLower() == "asc"
+                ? query.OrderBy(hc => hc.CalculateWellnessScore())
+                : query.OrderByDescending(hc => hc.CalculateWellnessScore()),
+            _ => sortDirection.ToLower() == "asc"
+                ? query.OrderBy(hc => hc.CheckedAt)
+                : query.OrderByDescending(hc => hc.CheckedAt)
+        };
+
+        var items = await sortedQuery
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
     public async Task AddAsync(HealthCheck healthCheck)
     {
         if (!healthCheck.IsValid())
@@ -103,6 +142,31 @@ public class WellnessAlertRepository : IWellnessAlertRepository
             .OrderByDescending(wa => wa.Severity)
             .ThenByDescending(wa => wa.CreatedAt)
             .ToListAsync();
+    }
+
+    public async Task<(List<WellnessAlert> Items, int TotalCount)> GetPaginatedByUserIdAsync(
+        int userId, 
+        int pageNumber = 1, 
+        int pageSize = 10, 
+        bool? includeResolved = false)
+    {
+        var query = _context.WellnessAlerts.Where(wa => wa.UserId == userId);
+
+        if (!includeResolved.HasValue || !includeResolved.Value)
+        {
+            query = query.Where(wa => wa.ResolvedAt == null);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderByDescending(wa => wa.Severity)
+            .ThenByDescending(wa => wa.CreatedAt)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
     }
 
     public async Task AddAsync(WellnessAlert alert)

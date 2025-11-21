@@ -1,5 +1,6 @@
 using HabitFlow.Application.Services;
 using HabitFlow.Infrastructure.Data;
+using HabitFlow.Infrastructure.Exceptions;
 using HabitFlow.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,8 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
     dbContext.SeedData();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (!app.Environment.IsDevelopment())
 {

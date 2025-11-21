@@ -468,3 +468,4 @@ C:\Users\joaod\source\repos\WorkSafe\WorkSafe\obj\Debug\net10.0\refint\WorkSafe.
 C:\Users\joaod\source\repos\WorkSafe\WorkSafe\obj\Debug\net10.0\WorkSafe.pdb
 C:\Users\joaod\source\repos\WorkSafe\WorkSafe\obj\Debug\net10.0\WorkSafe.genruntimeconfig.cache
 C:\Users\joaod\source\repos\WorkSafe\WorkSafe\obj\Debug\net10.0\ref\WorkSafe.dll
+C:\Users\joaod\source\repos\WorkSafe\WorkSafe\obj\Debug\net10.0\WorkSafe.sourcelink.json

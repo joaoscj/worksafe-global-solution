@@ -1,3 +1,4 @@
+using HabitFlow.Application.DTOs;
 using HabitFlow.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +12,25 @@ public class IndexModel : PageModel
     [BindProperty(SupportsGet = true)]
     public int UserId { get; set; } = 1;
 
-    public IEnumerable<HabitFlow.Application.DTOs.HealthCheckDto> HealthChecks { get; set; } = new List<HabitFlow.Application.DTOs.HealthCheckDto>();
+    [BindProperty(SupportsGet = true)]
+    public int PageNumber { get; set; } = 1;
+
+    [BindProperty(SupportsGet = true)]
+    public int PageSize { get; set; } = 10;
+
+    [BindProperty(SupportsGet = true)]
+    public DateTime? StartDate { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public DateTime? EndDate { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+    public string SortBy { get; set; } = "CheckedAt";
+
+    [BindProperty(SupportsGet = true)]
+    public string SortDirection { get; set; } = "desc";
+
+    public IEnumerable<HealthCheckDto> HealthChecks { get; set; } = new List<HealthCheckDto>();
 
     public IndexModel(IHealthCheckService healthCheckService)
     {
@@ -20,6 +39,17 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        HealthChecks = await _healthCheckService.GetHealthChecksByUserIdAsync(UserId);
+        try
+        {
+            // Aplicar limites de validação
+            if (PageNumber < 1) PageNumber = 1;
+            if (PageSize < 1 || PageSize > 100) PageSize = 10;
+
+            HealthChecks = await _healthCheckService.GetHealthChecksByUserIdAsync(UserId);
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, $"Erro ao carregar verificações: {ex.Message}");
+        }
     }
 }
