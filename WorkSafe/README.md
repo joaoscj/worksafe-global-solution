@@ -4,17 +4,14 @@ Monitor de Bem-Estar e Saúde no Trabalho Híbrido ou Remoto.
 
 ## Visão Geral
 
-**WorkSafe** é uma aplicação web desenvolvida com Razor Pages em .NET 10 para monitorar a saúde e bem-estar de profissionais em ambientes de trabalho híbrido ou remoto. O sistema permite que usuários realizem verificações periódicas de saúde, recebam alertas automáticos quando detectados problemas e obtenham dicas personalizadas de bem-estar.
+WorkSafe é uma aplicação web em .NET 10 que monitora a saúde e bem-estar de profissionais. Permite criar verificações periódicas, receber alertas automáticos e obter dicas personalizadas.
 
-### Funcionalidades Principais
-
-- ✅ Verificações de saúde periódicas (Estresse, Sono, Satisfação Profissional, Saúde Mental e Física)
-- ✅ Alertas automáticos baseados em limiares de severidade
-- ✅ Dicas personalizadas de bem-estar
-- ✅ Dashboard com visualização de métricas
-- ✅ Histórico de verificações com filtros e paginação
-- ✅ Resolução de alertas
-- ✅ Tratamento centralizado de erros
+**Funcionalidades:**
+- Verificações de saúde (Estresse, Sono, Satisfação, Saúde Mental/Física)
+- Alertas automáticos baseados em limiares
+- Dicas personalizadas de bem-estar
+- Dashboard com métricas
+- Histórico com filtros e paginação
 
 ## Integrantes
 
@@ -26,68 +23,51 @@ Monitor de Bem-Estar e Saúde no Trabalho Híbrido ou Remoto.
 
 ## Arquitetura
 
-O projeto segue a arquitetura em camadas com separação clara de responsabilidades:
-
-### 📁 Estrutura de Pastas
-
 ```
-WorkSafe/
-├── Domain/               # Camada de Domínio
-│   └── Entities/        # Entidades de negócio (User, HealthCheck, WellnessAlert, etc)
-├── Application/         # Camada de Aplicação
-│   ├── Services/        # Serviços de aplicação (casos de uso)
-│   └── DTOs/            # Data Transfer Objects
-├── Infrastructure/      # Camada de Infraestrutura
-│   ├── Data/            # DbContext e DataSeeder
-│   ├── Repositories/    # Implementações de repositórios
-│   └── Exceptions/      # Tratamento de erros
-├── Pages/               # Interface Razor Pages
-├── Models/              # ViewModels e Models
-└── Program.cs           # Configuração da aplicação
+Domain/                  # Entidades (User, HealthCheck, WellnessAlert, etc)
+Application/             # Serviços + DTOs com validações
+Infrastructure/          # Repositórios + DbContext + Migrations
+Pages/                   # Razor Pages (6 páginas)
 ```
 
-### 🏗️ Decisões Arquiteturais
-
-1. **Razor Pages** em vez de MVC: Melhor para aplicações com foco em Pages individuais
-2. **Entity Framework Core 10**: ORM para acesso a dados com migrations
-3. **Repository Pattern**: Abstração da camada de dados para facilitar testes
-4. **DTOs**: Transferência segura de dados entre camadas
-5. **Validação com Data Annotations**: Validação em nível de aplicação
-6. **Middleware de Tratamento de Erros**: Resposta padronizada com ProblemDetails
-7. **Injeção de Dependência**: Integrada nativamente ao ASP.NET Core
+**Decisões Arquiteturais:**
+- Razor Pages (melhor para aplicações page-focused)
+- Repository Pattern para abstração de dados
+- DTOs para transferência segura entre camadas
+- Validação em 3 camadas (DTO → Service → Repository)
+- Middleware centralizado para tratamento de erros
 
 ## Tecnologias
 
-| Tecnologia | Versão | Propósito |
-|-----------|--------|----------|
-| .NET | 10.0 | Framework principal |
-| Razor Pages | 10.0 | Framework web |
-| Entity Framework Core | 10.0 | ORM |
-| SQL Server | LocalDB | Banco de dados |
-| Bootstrap | 5 | CSS Framework |
-| C# | 12 | Linguagem de programação |
+- .NET 10 | Razor Pages | Entity Framework Core 10 | SQL Server | Bootstrap 5
 
 ## Como Rodar
 
 ### Pré-requisitos
+- .NET 10 SDK
+- SQL Server LocalDB
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
-- [SQL Server LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb) ou SQL Server
-
-### 1. Clonar o Repositório
+### Passos
 
 ```bash
+# 1. Clonar repositório
 git clone https://github.com/joaoscj/worksafe-global-solution.git
 cd WorkSafe/WorkSafe
-```
 
-### 2. Restaurar Dependências
-
-```bash
+# 2. Restaurar dependências
 dotnet restore
+
+# 3. Criar banco de dados
+dotnet ef database update
+
+# 4. Executar
+dotnet run
+
+# 5. Acessar
+# https://localhost:7001
 ```
 
-### 3. Configurar Banco de Dados
+## Configuração
 
 Editar `appsettings.json` se necessário:
 
@@ -99,248 +79,97 @@ Editar `appsettings.json` se necessário:
 }
 ```
 
-### 4. Aplicar Migrations
+## Rotas Principais
 
-```bash
-dotnet ef database update
-```
-
-Isso criará o banco de dados e aplicará todas as migrations, carregando automaticamente dados de demonstração.
-
-### 5. Executar a Aplicação
-
-```bash
-dotnet run
-```
-
-A aplicação estará disponível em: **https://localhost:7001**
-
-## Variáveis de Ambiente
-
-Opcionalmente, você pode criar um arquivo `appsettings.Development.json`:
-
-```json
-{
-  "Logging": {
-    "LogLevel": {
-      "Default": "Debug",
-      "Microsoft.AspNetCore": "Information"
-    }
-  },
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=seu-servidor;Database=WorkSafeDb;User Id=seu-usuario;Password=sua-senha;Encrypt=true;"
-  }
-}
-```
-
-## Navegação e Rotas
-
-| Página | Rota | HTTP | Função |
-|--------|------|------|--------|
-| Dashboard | `/` | GET | Resumo de bem-estar do usuário |
-| Verificações | `/HealthChecks` | GET | Histórico de verificações com paginação |
-| Nova Verificação | `/HealthChecks/Create` | GET/POST | Criar nova verificação de saúde |
-| Alertas | `/Alerts` | GET | Ver alertas do usuário |
-| Resolver Alerta | `/Alerts/Resolve` | POST | Marcar alerta como resolvido |
-| Dicas | `/Tips` | GET | Ver dicas personalizadas de bem-estar |
+| Rota | Função |
+|------|--------|
+| `/` | Dashboard com resumo de bem-estar |
+| `/HealthChecks` | Histórico de verificações |
+| `/HealthChecks/Create` | Criar verificação |
+| `/Alerts` | Ver alertas |
+| `/Tips` | Dicas de bem-estar |
 
 ## Como Usar
 
-### 1️⃣ Criar Verificação de Saúde
+### 1. Criar Verificação
+- Clique em **"Nova Verificação de Saúde"**
+- Preencha valores 1-10 para: Estresse, Sono, Satisfação, Saúde Mental, Saúde Física
+- Clique **"Salvar"**
 
-1. Clique no botão **"Nova Verificação de Saúde"** no painel
-2. Preencha os valores de 1 a 10 para:
-   - **Estresse**: Nível de estresse atual
-   - **Sono**: Qualidade do sono da noite anterior
-   - **Satisfação Profissional**: Satisfação com o trabalho
-   - **Saúde Mental**: Estado mental geral
-   - **Saúde Física**: Condição física geral
-3. (Opcional) Adicione observações
-4. Clique **"Salvar"**
+### 2. Alertas Automáticos
+Alertas são criados quando:
+- Estresse ≥ 8 → Alerta de Estresse Elevado
+- Sono ≤ 3 → Alerta de Sono Ruim
+- Satisfação ≤ 3 → Alerta de Satisfação Baixa
+- Saúde Mental ≤ 3 → Alerta de Saúde Mental
+- Saúde Física ≤ 3 → Alerta de Saúde Física
 
-### 2️⃣ Ver Histórico de Verificações
-
-1. Navegue para **"Histórico de Verificações"**
-2. Visualize todas as verificações realizadas
-3. Use filtros para buscar por período (data início/fim)
-4. Ordene por data ou score de bem-estar
-
-### 3️⃣ Verificar Alertas
-
-Alertas são criados automaticamente quando:
-
-| Condição | Ação |
-|----------|------|
-| Estresse ≥ 8 | Alerta de Estresse Elevado (Critical/High) |
-| Sono ≤ 3 | Alerta de Sono Ruim (High) |
-| Satisfação Profissional ≤ 3 | Alerta de Satisfação Baixa (Medium) |
-| Saúde Mental ≤ 3 | Alerta de Saúde Mental (Critical) |
-| Saúde Física ≤ 3 | Alerta de Saúde Física (High) |
-
-### 4️⃣ Resolver Alertas
-
-1. Vá para a página **"Alertas"**
-2. Revise as recomendações
-3. Clique em **"Resolver"** para marcar como resolvido
-4. Alertas resolvidos deixam de aparecer na lista
-
-### 5️⃣ Receber Dicas Personalizadas
-
-1. Navegue para **"Dicas de Bem-Estar"**
-2. Visualize dicas categorizadas (Produtividade, Estresse, Sono, etc)
-3. As dicas são sugeridas com base no seu score de bem-estar
+### 3. Resolver Alertas
+- Vá para **"Alertas"**
+- Revise as recomendações
+- Clique **"Resolver"**
 
 ## Dados de Demonstração
 
 Ao iniciar, o sistema carrega automaticamente:
+- 2 usuários de teste
+- 4 verificações de exemplo
+- 8 dicas de bem-estar
+- Resumos iniciais
 
-- **2 usuários**: João Silva (RM exemplo) e Maria Santos (RM exemplo)
-- **4 verificações**: Histórico de bem-estar dos usuários
-- **8 dicas**: Dicas em diferentes categorias (Sono, Estresse, Exercício, etc)
-- **Resumos de bem-estar**: Estatísticas iniciais para cada usuário
-
-## Estrutura de Dados
-
-### Entidades Principais
-
-#### 📋 User
-```csharp
-public class User
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-    public ICollection<HealthCheck> HealthChecks { get; set; }
-    public ICollection<WellnessAlert> WellnessAlerts { get; set; }
-}
-```
-
-#### 📊 HealthCheck
-```csharp
-public class HealthCheck
-{
-    public int Id { get; set; }
-    public int UserId { get; set; }
-    public int StressLevel { get; set; }      // 1-10
-    public int SleepQuality { get; set; }     // 1-10
-    public int JobSatisfaction { get; set; }  // 1-10
-    public int MentalHealth { get; set; }     // 1-10
-    public int PhysicalHealth { get; set; }   // 1-10
-    public string? Notes { get; set; }
-    public DateTime CheckedAt { get; set; }
-    public DateTime CreatedAt { get; set; }
-    
-    // Métodos de negócio
-    public bool IsValid() { /* ... */ }
-    public int CalculateWellnessScore() { /* ... */ }
-    public bool RequiresAlert() { /* ... */ }
-}
-```
-
-#### ⚠️ WellnessAlert
-```csharp
-public class WellnessAlert
-{
-    public int Id { get; set; }
-    public int UserId { get; set; }
-    public AlertType Type { get; set; }        // Enum
-    public AlertSeverity Severity { get; set; } // Low, Medium, High, Critical
-    public string Message { get; set; }
-    public string? Recommendation { get; set; }
-    public bool IsRead { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? ResolvedAt { get; set; }
-    
-    // Métodos de negócio
-    public void MarkAsRead() { /* ... */ }
-    public void Resolve() { /* ... */ }
-}
-```
-
-#### 💡 WellnessTip
-```csharp
-public class WellnessTip
-{
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string? Category { get; set; }
-    public int MinWellnessScore { get; set; }
-    public int MaxWellnessScore { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime CreatedAt { get; set; }
-}
-```
-
-## Serviços de Aplicação
+## Serviços (Application Layer)
 
 ### HealthCheckService
-- `GetHealthCheckByIdAsync(int id)` - Busca verificação por ID
-- `GetHealthChecksByUserIdAsync(int userId)` - Lista todas as verificações do usuário
-- `GetLatestHealthCheckAsync(int userId)` - Retorna última verificação
-- `GetHealthChecksByDateRangeAsync(int userId, DateTime start, DateTime end)` - Busca por período
-- `CreateHealthCheckAsync(CreateHealthCheckDto dto)` - Cria nova verificação
-- `UpdateHealthCheckAsync(int id, UpdateHealthCheckDto dto)` - Atualiza verificação
-- `DeleteHealthCheckAsync(int id)` - Deleta verificação
+```csharp
+GetHealthCheckByIdAsync(int id)
+GetHealthChecksByUserIdAsync(int userId)
+GetLatestHealthCheckAsync(int userId)
+CreateHealthCheckAsync(CreateHealthCheckDto dto)
+UpdateHealthCheckAsync(int id, UpdateHealthCheckDto dto)
+DeleteHealthCheckAsync(int id)
+```
 
 ### WellnessAlertService
-- `GetAlertByIdAsync(int id)` - Busca alerta por ID
-- `GetAlertsByUserIdAsync(int userId)` - Lista todos os alertas
-- `GetUnresolvedAlertsByUserIdAsync(int userId)` - Lista alertas não resolvidos
-- `CreateAlertFromHealthCheckAsync(HealthCheck healthCheck)` - Cria alertas baseado em verificação
-- `MarkAlertAsReadAsync(int alertId)` - Marca alerta como lido
-- `ResolveAlertAsync(int alertId)` - Resolve alerta
-- `DeleteAlertAsync(int id)` - Deleta alerta
+```csharp
+GetAlertByIdAsync(int id)
+GetAlertsByUserIdAsync(int userId)
+GetUnresolvedAlertsByUserIdAsync(int userId)
+CreateAlertFromHealthCheckAsync(HealthCheck healthCheck)
+ResolveAlertAsync(int alertId)
+```
 
 ### TipsService
-- `GetTipsForWellnessScoreAsync(int wellnessScore)` - Dicas por score
-- `GetTipsByCategoryAsync(string category)` - Dicas por categoria
+```csharp
+GetTipsForWellnessScoreAsync(int wellnessScore)
+GetTipsByCategoryAsync(string category)
+```
 
 ## Validação de Dados
 
-O projeto implementa validação em múltiplas camadas:
+Implementada em 3 camadas:
 
-### 1. DTOs com Data Annotations
+**1. DTOs com Data Annotations**
 ```csharp
-public class CreateHealthCheckDto
-{
-    [Required(ErrorMessage = "Nível de estresse é obrigatório")]
-    [Range(1, 10, ErrorMessage = "Deve estar entre 1 e 10")]
-    public int StressLevel { get; set; }
-}
+[Required]
+[Range(1, 10, ErrorMessage = "Deve estar entre 1 e 10")]
+public int StressLevel { get; set; }
 ```
 
-### 2. Métodos de Negócio
+**2. Métodos de Negócio**
 ```csharp
-public bool IsValid()
-{
-    return StressLevel >= 1 && StressLevel <= 10 && /* ... */;
-}
+public bool IsValid() => StressLevel >= 1 && StressLevel <= 10;
 ```
 
-### 3. Validação em Repositórios
+**3. Repositórios**
 ```csharp
-public async Task AddAsync(HealthCheck healthCheck)
-{
-    if (!healthCheck.IsValid())
-        throw new InvalidOperationException("Health check has invalid values.");
-    
-    await _context.HealthChecks.AddAsync(healthCheck);
-}
+if (!healthCheck.IsValid())
+    throw new InvalidOperationException("Invalid values");
 ```
 
 ## Tratamento de Erros
 
-O projeto implementa tratamento centralizado de erros via middleware:
+Middleware centralizado retorna ProblemDetails:
 
-### Middleware de Exceções
-```csharp
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-```
-
-### Resposta Padrão (ProblemDetails)
 ```json
 {
   "status": 400,
@@ -350,96 +179,36 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 }
 ```
 
-## Desenvolvedor - Operações de Banco
-
-### Resetar Banco de Dados Completamente
+## Operações de Banco (Desenvolvedor)
 
 ```bash
-# Remover banco
+# Resetar banco completamente
 dotnet ef database drop --force
-
-# Recriar e seedar
 dotnet ef database update
-```
 
-### Criar Nova Migration
-
-```bash
-dotnet ef migrations add NomeDaMigration
+# Criar migration
+dotnet ef migrations add NomeMigration
 dotnet ef database update
-```
 
-### Ver Migrations Aplicadas
-
-```bash
+# Ver migrations
 dotnet ef migrations list
 ```
 
-### Seeds de Dados
-
 Modificar dados de demonstração em: `Infrastructure/Data/DataSeeder.cs`
 
-## Exemplos de Uso
+## Exemplos
 
-### Criar Verificação (via formulário)
+### Criar Verificação
+```
+GET https://localhost:7001/HealthChecks/Create?UserId=1
+POST com dados preenchidos
+```
 
-1. Acesse: `https://localhost:7001/HealthChecks/Create?UserId=1`
-2. Preencha o formulário com valores 1-10
-3. Submit
-
-### Buscar Histórico com Filtros
-
+### Buscar com Filtros
 ```
 https://localhost:7001/HealthChecks?UserId=1&PageNumber=1&PageSize=10
 ```
 
-### Ver Alertas Não Resolvidos
-
+### Ver Alertas
 ```
 https://localhost:7001/Alerts?UserId=1
-```
-
-### Resolver Alerta
-
-```
-POST https://localhost:7001/Alerts/Resolve
-Body: { "alertId": 1 }
-```
-
-## Performance e Segurança
-
-- ✅ Injeção de dependência para testabilidade
-- ✅ Validação de entrada em todas as camadas
-- ✅ Proteção contra SQL injection via EF Core
-- ✅ Tratamento de exceções centralizado
-- ✅ HTTPS habilitado
-- ✅ HSTS habilitado em produção
-- ✅ Logging estruturado
-
-## Roadmap Futuro
-
-- [ ] Autenticação de usuários (Identity)
-- [ ] Autorização por roles (Admin, User)
-- [ ] Gráficos de histórico (Chart.js/Plotly)
-- [ ] Exportar relatórios (PDF/Excel)
-- [ ] Email de notificação de alertas
-- [ ] API REST complementar
-- [ ] Testes unitários (xUnit)
-- [ ] Docker support
-
-## Documentação Adicional
-
-- [Microsoft Docs - Razor Pages](https://learn.microsoft.com/aspnet/core/razor-pages)
-- [Microsoft Docs - Entity Framework Core](https://learn.microsoft.com/ef/core/)
-- [Microsoft Docs - Dependency Injection](https://learn.microsoft.com/aspnet/core/fundamentals/dependency-injection)
-
-## Licença
-
-Projeto de avaliação acadêmica - FIAP Tech Challenge.
-
----
-
-**Versão:** 1.0  
-**Ano:** 2025  
-**Última Atualização:** 2025  
-**Status:** ✅ Completo
