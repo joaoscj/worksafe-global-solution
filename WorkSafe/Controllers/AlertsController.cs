@@ -20,9 +20,6 @@ public class AlertsController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Obtém um alerta por ID
-    /// </summary>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(WellnessAlertDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -38,9 +35,6 @@ public class AlertsController : ControllerBase
         return Ok(alert);
     }
 
-    /// <summary>
-    /// Lista todos os alertas de um usuário
-    /// </summary>
     [HttpGet("user/{userId}")]
     [ProducesResponseType(typeof(IEnumerable<WellnessAlertDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WellnessAlertDto>>> GetByUserId(int userId)
@@ -49,9 +43,6 @@ public class AlertsController : ControllerBase
         return Ok(alerts);
     }
 
-    /// <summary>
-    /// Lista apenas os alertas não resolvidos de um usuário
-    /// </summary>
     [HttpGet("user/{userId}/unresolved")]
     [ProducesResponseType(typeof(IEnumerable<WellnessAlertDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WellnessAlertDto>>> GetUnresolvedByUserId(int userId)
@@ -60,9 +51,6 @@ public class AlertsController : ControllerBase
         return Ok(alerts);
     }
 
-    /// <summary>
-    /// Marca um alerta como lido
-    /// </summary>
     [HttpPatch("{id}/read")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,9 +72,6 @@ public class AlertsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Resolve um alerta
-    /// </summary>
     [HttpPatch("{id}/resolve")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -108,9 +93,6 @@ public class AlertsController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Deleta um alerta
-    /// </summary>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

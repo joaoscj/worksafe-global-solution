@@ -20,9 +20,6 @@ public class HealthChecksController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Obtém uma verificação de saúde por ID
-    /// </summary>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HealthCheckDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -38,9 +35,6 @@ public class HealthChecksController : ControllerBase
         return Ok(healthCheck);
     }
 
-    /// <summary>
-    /// Lista todas as verificações de saúde de um usuário
-    /// </summary>
     [HttpGet("user/{userId}")]
     [ProducesResponseType(typeof(IEnumerable<HealthCheckDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<HealthCheckDto>>> GetByUserId(
@@ -63,9 +57,6 @@ public class HealthChecksController : ControllerBase
         return Ok(healthChecks);
     }
 
-    /// <summary>
-    /// Obtém a última verificação de saúde de um usuário
-    /// </summary>
     [HttpGet("user/{userId}/latest")]
     [ProducesResponseType(typeof(HealthCheckDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -81,9 +72,6 @@ public class HealthChecksController : ControllerBase
         return Ok(healthCheck);
     }
 
-    /// <summary>
-    /// Cria uma nova verificação de saúde
-    /// </summary>
     [HttpPost]
     [ProducesResponseType(typeof(HealthCheckDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,9 +97,6 @@ public class HealthChecksController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Atualiza uma verificação de saúde existente
-    /// </summary>
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(HealthCheckDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -139,9 +124,6 @@ public class HealthChecksController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Deleta uma verificação de saúde
-    /// </summary>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

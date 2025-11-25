@@ -23,9 +23,6 @@ public class TipsController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Obtém dicas de bem-estar baseadas no score de bem-estar
-    /// </summary>
     [HttpGet("wellness-score/{wellnessScore}")]
     [ProducesResponseType(typeof(IEnumerable<WellnessTipDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WellnessTipDto>>> GetByWellnessScore(int wellnessScore)
@@ -39,9 +36,6 @@ public class TipsController : ControllerBase
         return Ok(tips);
     }
 
-    /// <summary>
-    /// Obtém dicas de bem-estar baseadas no último health check do usuário
-    /// </summary>
     [HttpGet("user/{userId}")]
     [ProducesResponseType(typeof(IEnumerable<WellnessTipDto>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -58,9 +52,6 @@ public class TipsController : ControllerBase
         return Ok(tips);
     }
 
-    /// <summary>
-    /// Obtém dicas de bem-estar por categoria
-    /// </summary>
     [HttpGet("category/{category}")]
     [ProducesResponseType(typeof(IEnumerable<WellnessTipDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<WellnessTipDto>>> GetByCategory(string category)
